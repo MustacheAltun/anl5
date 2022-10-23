@@ -1,0 +1,15 @@
+D:\hbo\anl5\test\serverUDP\obj\Debug\net6.0\serverUDP.csproj.AssemblyReference.cache
+D:\hbo\anl5\test\serverUDP\obj\Debug\net6.0\serverUDP.GeneratedMSBuildEditorConfig.editorconfig
+D:\hbo\anl5\test\serverUDP\obj\Debug\net6.0\serverUDP.AssemblyInfoInputs.cache
+D:\hbo\anl5\test\serverUDP\obj\Debug\net6.0\serverUDP.AssemblyInfo.cs
+D:\hbo\anl5\test\serverUDP\obj\Debug\net6.0\serverUDP.csproj.CoreCompileInputs.cache
+D:\hbo\anl5\test\serverUDP\bin\Debug\net6.0\serverUDP.exe
+D:\hbo\anl5\test\serverUDP\bin\Debug\net6.0\serverUDP.deps.json
+D:\hbo\anl5\test\serverUDP\bin\Debug\net6.0\serverUDP.runtimeconfig.json
+D:\hbo\anl5\test\serverUDP\bin\Debug\net6.0\serverUDP.dll
+D:\hbo\anl5\test\serverUDP\bin\Debug\net6.0\serverUDP.pdb
+D:\hbo\anl5\test\serverUDP\obj\Debug\net6.0\serverUDP.dll
+D:\hbo\anl5\test\serverUDP\obj\Debug\net6.0\refint\serverUDP.dll
+D:\hbo\anl5\test\serverUDP\obj\Debug\net6.0\serverUDP.pdb
+D:\hbo\anl5\test\serverUDP\obj\Debug\net6.0\serverUDP.genruntimeconfig.cache
+D:\hbo\anl5\test\serverUDP\obj\Debug\net6.0\ref\serverUDP.dll

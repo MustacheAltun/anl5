@@ -1,0 +1,15 @@
+D:\hbo\anl5\test\clinetUDP\bin\Debug\net6.0\clinetUDP.exe
+D:\hbo\anl5\test\clinetUDP\bin\Debug\net6.0\clinetUDP.deps.json
+D:\hbo\anl5\test\clinetUDP\bin\Debug\net6.0\clinetUDP.runtimeconfig.json
+D:\hbo\anl5\test\clinetUDP\bin\Debug\net6.0\clinetUDP.dll
+D:\hbo\anl5\test\clinetUDP\bin\Debug\net6.0\clinetUDP.pdb
+D:\hbo\anl5\test\clinetUDP\obj\Debug\net6.0\clinetUDP.csproj.AssemblyReference.cache
+D:\hbo\anl5\test\clinetUDP\obj\Debug\net6.0\clinetUDP.GeneratedMSBuildEditorConfig.editorconfig
+D:\hbo\anl5\test\clinetUDP\obj\Debug\net6.0\clinetUDP.AssemblyInfoInputs.cache
+D:\hbo\anl5\test\clinetUDP\obj\Debug\net6.0\clinetUDP.AssemblyInfo.cs
+D:\hbo\anl5\test\clinetUDP\obj\Debug\net6.0\clinetUDP.csproj.CoreCompileInputs.cache
+D:\hbo\anl5\test\clinetUDP\obj\Debug\net6.0\clinetUDP.dll
+D:\hbo\anl5\test\clinetUDP\obj\Debug\net6.0\refint\clinetUDP.dll
+D:\hbo\anl5\test\clinetUDP\obj\Debug\net6.0\clinetUDP.pdb
+D:\hbo\anl5\test\clinetUDP\obj\Debug\net6.0\clinetUDP.genruntimeconfig.cache
+D:\hbo\anl5\test\clinetUDP\obj\Debug\net6.0\ref\clinetUDP.dll
