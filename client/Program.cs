@@ -103,14 +103,8 @@ namespace Client
                 // Console.WriteLine($"{connectionsettings.From} {connectionsettings.To} {connectionsettings.ConID}"); // delete
                 // Console.WriteLine(requestdata.Type != Messages.REPLY); // delete
                 
-                RequestMSG verifyreply = new RequestMSG(){
-                    Type = requestdata.Type,
-                    From = requestdata.To,
-                    To = requestdata.From,
-                    FileName = requestdata.FileName,
-                    ConID = requestdata.ConID,
-                    Status = requestdata.Status
-                };
+                RequestMSG verifyreply = new RequestMSG();
+                VerifyReplyFunction(verifyreply,requestdata);
 
                 var verify = ErrorHandler.VerifyRequest(verifyreply, connectionsettings);
                 // Console.WriteLine("Checking request"); // delete
@@ -189,6 +183,15 @@ namespace Client
             close.To = hello.To;
             close.ConID = hello.ConID;
 
+        }
+        public static RequestMSG VerifyReplyFunction(RequestMSG reply, RequestMSG requestdata){
+            reply.Type = requestdata.Type;
+            reply.From = requestdata.To;
+            reply.To = requestdata.From;
+            reply.FileName = requestdata.FileName;
+            reply.ConID = requestdata.ConID;
+            reply.Status = requestdata.Status;
+            return reply;
         }
     }
 }
