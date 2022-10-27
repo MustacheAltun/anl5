@@ -184,14 +184,14 @@ namespace Client
             close.ConID = hello.ConID;
 
         }
-        public static RequestMSG VerifyReplyFunction(RequestMSG reply, RequestMSG requestdata){
+        public static void VerifyReplyFunction(RequestMSG reply, RequestMSG requestdata){
             reply.Type = requestdata.Type;
             reply.From = requestdata.To;
             reply.To = requestdata.From;
             reply.FileName = requestdata.FileName;
             reply.ConID = requestdata.ConID;
             reply.Status = requestdata.Status;
-            return reply;
+            
         }
     }
 }
