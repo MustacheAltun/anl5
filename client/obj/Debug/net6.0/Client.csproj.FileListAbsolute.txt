@@ -1,15 +1,15 @@
-D:\hbo\anl5\client\bin\Debug\net6.0\Client.exe
-D:\hbo\anl5\client\bin\Debug\net6.0\Client.deps.json
-D:\hbo\anl5\client\bin\Debug\net6.0\Client.runtimeconfig.json
-D:\hbo\anl5\client\bin\Debug\net6.0\Client.dll
-D:\hbo\anl5\client\bin\Debug\net6.0\Client.pdb
-D:\hbo\anl5\client\obj\Debug\net6.0\Client.csproj.AssemblyReference.cache
-D:\hbo\anl5\client\obj\Debug\net6.0\Client.GeneratedMSBuildEditorConfig.editorconfig
-D:\hbo\anl5\client\obj\Debug\net6.0\Client.AssemblyInfoInputs.cache
-D:\hbo\anl5\client\obj\Debug\net6.0\Client.AssemblyInfo.cs
-D:\hbo\anl5\client\obj\Debug\net6.0\Client.csproj.CoreCompileInputs.cache
-D:\hbo\anl5\client\obj\Debug\net6.0\Client.dll
-D:\hbo\anl5\client\obj\Debug\net6.0\refint\Client.dll
-D:\hbo\anl5\client\obj\Debug\net6.0\Client.pdb
-D:\hbo\anl5\client\obj\Debug\net6.0\Client.genruntimeconfig.cache
-D:\hbo\anl5\client\obj\Debug\net6.0\ref\Client.dll
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\bin\Debug\net6.0\Client.exe
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\bin\Debug\net6.0\Client.deps.json
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\bin\Debug\net6.0\Client.runtimeconfig.json
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\bin\Debug\net6.0\Client.dll
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\bin\Debug\net6.0\Client.pdb
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\obj\Debug\net6.0\Client.csproj.AssemblyReference.cache
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\obj\Debug\net6.0\Client.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\obj\Debug\net6.0\Client.AssemblyInfoInputs.cache
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\obj\Debug\net6.0\Client.AssemblyInfo.cs
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\obj\Debug\net6.0\Client.csproj.CoreCompileInputs.cache
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\obj\Debug\net6.0\Client.dll
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\obj\Debug\net6.0\refint\Client.dll
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\obj\Debug\net6.0\Client.pdb
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\obj\Debug\net6.0\Client.genruntimeconfig.cache
+C:\Users\Min En\Desktop\new\assignment22_23_student_template\client\obj\Debug\net6.0\ref\Client.dll

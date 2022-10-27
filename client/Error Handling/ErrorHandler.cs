@@ -18,7 +18,7 @@ namespace UDP_FTP.Error_Handling
         }
         public static ErrorType VerifyRequest( RequestMSG req, ConSettings C)
         {
-            if (req.ConID != C.ConID || req.From != C.From || req.To != C.To || req.Type != Messages.REQUEST)
+            if (req.ConID != C.ConID || req.From != C.From || req.To != C.To || req.Type != Messages.REPLY)
                 return ErrorType.BADREQUEST;
             return ErrorType.NOERROR;
         }
