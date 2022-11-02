@@ -14,17 +14,16 @@ namespace UDP_FTP
             // TODO: add the student number of your group members as a string value. 
             // string format example: "Jan Jansen 09123456" 
             // If a group has only one member fill in an empty string for the second student
-            // string student_1 = ;
-            // string student_2 = ;
+            string student_1 = "Min En Cheng 1037939";
+            string student_2 = "Reajel Cicilia 1018371";
 
             
 
             Console.WriteLine("Server is waiting for new request!");
             Communicate FileShare = new Communicate();
-            FileShare.StartDownload();
-            // Console.WriteLine("The file download request terminated with code {0}.", FileShare.StartDownload());
+            Console.WriteLine("The file download request terminated with code {0}.", FileShare.StartDownload());
 
-            // Console.WriteLine("Group members: {0} | {1}", student_1, student_2);
+            Console.WriteLine("Group members: {0} | {1}", student_1, student_2);
         }
     }
 }

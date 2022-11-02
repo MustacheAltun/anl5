@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\hbo\\anl5\\file_download_server\\UDP_FTP.csproj": {}
+    "C:\\Users\\Min En\\Desktop\\new\\assignment22_23_student_template\\file_download_server\\UDP_FTP.csproj": {}
   },
   "projects": {
-    "D:\\hbo\\anl5\\file_download_server\\UDP_FTP.csproj": {
+    "C:\\Users\\Min En\\Desktop\\new\\assignment22_23_student_template\\file_download_server\\UDP_FTP.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\hbo\\anl5\\file_download_server\\UDP_FTP.csproj",
+        "projectUniqueName": "C:\\Users\\Min En\\Desktop\\new\\assignment22_23_student_template\\file_download_server\\UDP_FTP.csproj",
         "projectName": "UDP_FTP",
-        "projectPath": "D:\\hbo\\anl5\\file_download_server\\UDP_FTP.csproj",
-        "packagesPath": "C:\\Users\\Mustafa\\.nuget\\packages\\",
-        "outputPath": "D:\\hbo\\anl5\\file_download_server\\obj\\",
+        "projectPath": "C:\\Users\\Min En\\Desktop\\new\\assignment22_23_student_template\\file_download_server\\UDP_FTP.csproj",
+        "packagesPath": "C:\\Users\\Min En\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Min En\\Desktop\\new\\assignment22_23_student_template\\file_download_server\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Mustafa\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Min En\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
