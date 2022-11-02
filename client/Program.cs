@@ -64,12 +64,15 @@ namespace Client
                 var HelloMSGPackets = JsonSerializer.Serialize(h); 
                 msg = Encoding.ASCII.GetBytes(HelloMSGPackets);
                 sock.SendTo(msg, msg.Length, SocketFlags.None, ServerEndpoint);
-                // Console.WriteLine("Send Hello"); // delete
+                Console.WriteLine("Send Hello"); // delete
 
                 // TODO: Receive and verify a HelloMSG 
                 int recv = sock.ReceiveFrom(buffer, ref clientEP);
                 HelloMSG hellodata = JsonSerializer.Deserialize<HelloMSG>(Encoding.ASCII.GetString(buffer, 0, recv));
-                // Console.WriteLine("Received Hello"); // delete
+                if (hellodata.Type == Messages.HELLO_REPLY)
+                {
+                    Console.WriteLine("Received Hello"); // delete
+                }
                 // buffer = new byte[1000]    ???
                 // msg = new byte[100];
                 h.ConID = hellodata.ConID;
@@ -151,10 +154,22 @@ namespace Client
                 Console.WriteLine(textTest);
                 // TODO: Receive close message
                 // receive the message and verify if there are no errors
+                var RequestClose = JsonSerializer.Serialize(cls);
+                msg = Encoding.ASCII.GetBytes(RequestClose);
+                sock.SendTo(msg, msg.Length, SocketFlags.None, ServerEndpoint);
 
+                recv = sock.ReceiveFrom(buffer, ref clientEP);
+                CloseMSG closedata = JsonSerializer.Deserialize<CloseMSG>(Encoding.ASCII.GetString(buffer, 0, recv));
                 // TODO: confirm close message
+                if (closedata.Type == Messages.CLOSE_REQUEST)
+                {
+                    System.Console.WriteLine("close request is received");
+                    Console.WriteLine("Download Complete!");
+                    Console.WriteLine("Stopping Client.");
+                }
+                
 
-                Console.WriteLine("Stopping Client.");
+                
                 sock.Close(); 
             }
             catch
@@ -162,7 +177,7 @@ namespace Client
                 Console.WriteLine("\n Socket Error. Terminating");
             }
 
-            Console.WriteLine("Download Complete!");
+            
            
         }
         public static void SetConnection(HelloMSG hello, RequestMSG request, DataMSG data, AckMSG ack, CloseMSG close){
