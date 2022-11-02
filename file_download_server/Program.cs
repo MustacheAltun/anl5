@@ -21,8 +21,8 @@ namespace UDP_FTP
 
             Console.WriteLine("Server is waiting for new request!");
             Communicate FileShare = new Communicate();
-            FileShare.RunServer();
-            Console.WriteLine("The file download request terminated with code {0}.", FileShare.StartDownload());
+            FileShare.StartDownload();
+            // Console.WriteLine("The file download request terminated with code {0}.", FileShare.StartDownload());
 
             // Console.WriteLine("Group members: {0} | {1}", student_1, student_2);
         }

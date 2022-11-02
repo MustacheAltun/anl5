@@ -64,15 +64,12 @@ namespace Client
                 var HelloMSGPackets = JsonSerializer.Serialize(h); 
                 msg = Encoding.ASCII.GetBytes(HelloMSGPackets);
                 sock.SendTo(msg, msg.Length, SocketFlags.None, ServerEndpoint);
-                Console.WriteLine("Send Hello"); // delete
+                // Console.WriteLine("Send Hello"); // delete
 
                 // TODO: Receive and verify a HelloMSG 
                 int recv = sock.ReceiveFrom(buffer, ref clientEP);
                 HelloMSG hellodata = JsonSerializer.Deserialize<HelloMSG>(Encoding.ASCII.GetString(buffer, 0, recv));
-                if (hellodata.Type == Messages.HELLO_REPLY)
-                {
-                    Console.WriteLine("Received Hello"); // delete
-                }
+
                 // buffer = new byte[1000]    ???
                 // msg = new byte[100];
                 h.ConID = hellodata.ConID;
@@ -86,6 +83,15 @@ namespace Client
                     Sequence = 0
 
                 };
+                hellodata.From = connectionsettings.From;
+                hellodata.To = connectionsettings.To;
+                // TODO: Receive and verify a HelloMSG 
+                var temp = ErrorHandler.VerifyGreeting(hellodata, connectionsettings);
+                if (temp == ErrorType.BADREQUEST)
+                {
+                    Console.WriteLine("Hello reply error from the server side, stopping client"); // delete
+                    return;
+                }
                 //zet From, To, ConID op elk object
                 SetConnection(h, r, D, ack, cls);
                 // Console.WriteLine(h.To + r.To + D.To + ack.To + cls.To); // delete
@@ -181,6 +187,7 @@ namespace Client
            
         }
         public static void SetConnection(HelloMSG hello, RequestMSG request, DataMSG data, AckMSG ack, CloseMSG close){
+            // System.Console.WriteLine(hello.ConID);
             // request setup
             request.From = hello.From;
             request.To = hello.To;
