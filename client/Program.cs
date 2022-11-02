@@ -139,7 +139,7 @@ namespace Client
                     if (ackcounter == data.Sequence){
                         addtext = true;
                     }
-                    if (verify == ErrorType.NOERROR){
+                    if (verify == ErrorType.NOERROR && ack.Sequence !=2){
                         var AckMSGPackets = JsonSerializer.Serialize(ack);
                         msg = Encoding.ASCII.GetBytes(AckMSGPackets);
                         sock.SendTo(msg, msg.Length, SocketFlags.None, ServerEndpoint);
