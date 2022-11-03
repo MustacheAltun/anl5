@@ -48,21 +48,21 @@ namespace UDP_FTP.File_Handler
             // TODO: Instantiate and initialize different messages needed for the communication
             // required messages are: HelloMSG, RequestMSG, DataMSG, AckMSG, CloseMSG
             // Set attribute values for each class accordingly 
-            HelloMSG GreetBack = new HelloMSG()
-            {
-                Type = Messages.HELLO_REPLY,
-                From = "MyServer",
-                To = "MyClient",
-                ConID = this.SessionID
-            };
-            RequestMSG req = new RequestMSG()
-            {
-                From = "MyServer",
-                To = "MyClient",
-                Type = Messages.REPLY,
-                Status = ErrorType.NOERROR,
-                ConID = this.SessionID
-            };
+            // HelloMSG GreetBack = new HelloMSG()
+            // {
+            //     Type = Messages.HELLO_REPLY,
+            //     From = "MyServer",
+            //     To = "MyClient",
+            //     ConID = this.SessionID
+            // };
+            // RequestMSG req = new RequestMSG()
+            // {
+            //     From = "MyServer",
+            //     To = "MyClient",
+            //     Type = Messages.REPLY,
+            //     Status = ErrorType.NOERROR,
+            //     ConID = this.SessionID
+            // };
             DataMSG data = new DataMSG()
             {
                 From = "MyServer",
@@ -70,13 +70,13 @@ namespace UDP_FTP.File_Handler
                 Type = Messages.DATA,
                 ConID = this.SessionID
             };
-            AckMSG ack = new AckMSG()
-            {                
-                From = "MyServer",
-                To = "MyClient",
-                Type = Messages.ACK,
-                ConID = this.SessionID
-            };
+            // AckMSG ack = new AckMSG()
+            // {                
+            //     From = "MyServer",
+            //     To = "MyClient",
+            //     Type = Messages.ACK,
+            //     ConID = this.SessionID
+            // };
             CloseMSG cls = new CloseMSG()
             {
                 From = "MyServer",
@@ -86,9 +86,9 @@ namespace UDP_FTP.File_Handler
             };
             this.C = new ConSettings()
                 {
-                    From = GreetBack.From,
-                    To = GreetBack.To,
-                    ConID = GreetBack.ConID,
+                    From = "MyServer",
+                    To = "MyClient",
+                    ConID = this.SessionID,
                     Sequence = 0
                 };
             // TODO: Start the communication by receiving a HelloMSG message
@@ -97,42 +97,48 @@ namespace UDP_FTP.File_Handler
             // Type must match one of the ConSettings' types and receiver address must be the server address
             int recv = socket.ReceiveFrom(buffer, ref remoteEP);
             HelloMSG hellodata = JsonSerializer.Deserialize<HelloMSG>(Encoding.ASCII.GetString(buffer, 0, recv));
-            hellodata.From = GreetBack.From;
-            hellodata.To = GreetBack.To;
-            hellodata.Type = GreetBack.Type;
-            hellodata.ConID = GreetBack.ConID;
+            hellodata.From = C.From;
+            hellodata.To = C.To;
+            hellodata.Type = Messages.HELLO_REPLY;
+            hellodata.ConID = C.ConID;
+            
             // Console.WriteLine("receive Hello"); // delete
             // TODO: If no error is found then HelloMSG will be sent back
             var HelloMSGPackets = JsonSerializer.Serialize(hellodata); 
             msg = Encoding.ASCII.GetBytes(HelloMSGPackets);
             socket.SendTo(msg, msg.Length, SocketFlags.None, this.remoteEP);
+
             // Console.WriteLine("Send greeting back"); // delete
             // TODO: Receive the next message
             // Expected message is a download RequestMSG message containing the file name
             // Receive the message and verify if there are no errors
             recv = socket.ReceiveFrom(buffer, ref remoteEP);
             RequestMSG DownloadRequestMSG = JsonSerializer.Deserialize<RequestMSG>(Encoding.ASCII.GetString(buffer, 0, recv));
-            DownloadRequestMSG.From = req.From;
-            DownloadRequestMSG.To = req.To;
+            DownloadRequestMSG.From = C.From;
+            DownloadRequestMSG.To = C.To;
             
             if (ErrorHandler.VerifyRequest(DownloadRequestMSG, C) == ErrorType.BADREQUEST)
             {
                 Console.WriteLine("Download request error from the client side, stopping server"); // delete
                 return ErrorType.BADREQUEST;
             }
+
             // TODO: Send a RequestMSG of type REPLY message to remoteEndpoint verifying the status
-            DownloadRequestMSG.Type = req.Type;
+            DownloadRequestMSG.Type = Messages.REPLY;
             var DownloadReplyMSG = JsonSerializer.Serialize(DownloadRequestMSG); 
             msg = Encoding.ASCII.GetBytes(DownloadReplyMSG);
             socket.SendTo(msg, msg.Length, SocketFlags.None, this.remoteEP);
+
             // Console.WriteLine("Send download reply back"); // delete
             // TODO:  Start sending file data by setting first the socket ReceiveTimeout value
             this.socket.ReceiveTimeout = 1000;
+
             // TODO: Open and read the text-file first
             // Make sure to locate a path on windows and macos platforms
             // string lines = System.IO.File.ReadAllText(@".\"+DownloadRequestMSG.FileName);
             string lines = System.IO.File.ReadAllText(System.IO.Path.GetFullPath(DownloadRequestMSG.FileName));
             System.Console.WriteLine(System.IO.Path.GetFullPath(DownloadRequestMSG.FileName));
+
             // TODO: Sliding window with go-back-n implementation
             // Calculate the length of data to be sent
             // Send file-content as DataMSG message as long as there are still values to be sent
