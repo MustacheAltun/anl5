@@ -36,7 +36,7 @@ namespace Client
             byte[] buffer = new byte[1000];
             byte[] message = new byte[100];
             // TODO: Initialise the socket/s as needed from the description of the assignment
-            Socket sock = null;
+            Socket socket;
 
             IPAddress clientIP = IPAddress.Parse("127.0.0.1");
             IPEndPoint ServerEndpoint = new IPEndPoint(clientIP, 5004);
@@ -46,16 +46,16 @@ namespace Client
             try
             {
                 // TODO: Instantiate and initialize your socket
-                sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                 // TODO: Send hello mesg
                 HelloMSG hello_msg = new HelloMSG(){Type = Messages.HELLO, From = client_consettings.From, To = client_consettings.To};
                 var HelloMSGPackets = JsonSerializer.Serialize(hello_msg); 
                 message = Encoding.ASCII.GetBytes(HelloMSGPackets);
-                sock.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
+                socket.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
         
 
                 // TODO: Receive and verify a HelloMSG 
-                int receive_from_server = sock.ReceiveFrom(buffer, ref clientEP);
+                int receive_from_server = socket.ReceiveFrom(buffer, ref clientEP);
                 HelloMSG hello_reply = JsonSerializer.Deserialize<HelloMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
                 
                 hello_msg.ConID = hello_reply.ConID;
@@ -77,12 +77,12 @@ namespace Client
                 // TODO: Send the RequestMSG message requesting to download a file name
                 var serialized_request_msg = JsonSerializer.Serialize(request_msg);
                 message = Encoding.ASCII.GetBytes(serialized_request_msg);
-                sock.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
+                socket.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
         
 
                 // TODO: Receive a RequestMSG from remoteEndpoint
                 // receive the message and verify if there are no errors
-                receive_from_server = sock.ReceiveFrom(buffer, ref clientEP);
+                receive_from_server = socket.ReceiveFrom(buffer, ref clientEP);
                 RequestMSG server_accept = JsonSerializer.Deserialize<RequestMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
                 
                 server_accept.From = client_consettings.From;
@@ -102,7 +102,7 @@ namespace Client
                 AckMSG acck_message = new AckMSG(){From = client_consettings.From, Type = Messages.ACK, To = client_consettings.To, ConID = client_consettings.ConID};
                 while (true){
 
-                    receive_from_server = sock.ReceiveFrom(buffer, ref clientEP);
+                    receive_from_server = socket.ReceiveFrom(buffer, ref clientEP);
                     DataMSG server_data_msg = JsonSerializer.Deserialize<DataMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
                     acck_message.Sequence = server_data_msg.Sequence;
 
@@ -113,7 +113,7 @@ namespace Client
                     if (message_status == ErrorType.NOERROR){
                         var serialized_ack_msg = JsonSerializer.Serialize(acck_message);
                         message = Encoding.ASCII.GetBytes(serialized_ack_msg);
-                        sock.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
+                        socket.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
                     }
                     else {
                         sequence_received = false;
@@ -131,7 +131,7 @@ namespace Client
 
                 // TODO: Receive close message
                 // receive the message and verify if there are no errors
-                receive_from_server = sock.ReceiveFrom(buffer, ref clientEP);
+                receive_from_server = socket.ReceiveFrom(buffer, ref clientEP);
                 CloseMSG close_msg = JsonSerializer.Deserialize<CloseMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
                 close_msg.From = client_consettings.From;
                 close_msg.To = client_consettings.To;
@@ -146,11 +146,11 @@ namespace Client
                 close_msg.Type = Messages.CLOSE_CONFIRM;
                 var close_confirm = JsonSerializer.Serialize(close_msg);
                 message = Encoding.ASCII.GetBytes(close_confirm);
-                sock.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
+                socket.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
 
                 Console.WriteLine("Download Complete!");
                 Console.WriteLine("Stopping Client.");
-                sock.Close(); 
+                socket.Close(); 
             }
             catch
             {
