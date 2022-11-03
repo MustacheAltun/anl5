@@ -46,7 +46,6 @@ namespace UDP_FTP.File_Handler
         }
         public ErrorType StartDownload()
         {
-            System.Console.WriteLine(Server);
             // TODO: Instantiate and initialize different messages needed for the communication
             // required messages are: HelloMSG, RequestMSG, DataMSG, AckMSG, CloseMSG
             // Set attribute values for each class accordingly 
@@ -86,10 +85,10 @@ namespace UDP_FTP.File_Handler
             RequestMSG client_download_request = JsonSerializer.Deserialize<RequestMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_client));
             client_download_request.From = sever_Consettings.From;
             client_download_request.To = sever_Consettings.To;
-            
+
             if (ErrorHandler.VerifyRequest(client_download_request, sever_Consettings) == ErrorType.BADREQUEST)
             {
-                Console.WriteLine("Download request error from the client side, stopping server");
+                Console.WriteLine("Error! Download request error (client side). The server will be stopped.");
                 return ErrorType.BADREQUEST;
             }
 
@@ -187,7 +186,7 @@ namespace UDP_FTP.File_Handler
 
                         if (ErrorHandler.VerifyAck(receive_Ack, sever_Consettings) == ErrorType.BADREQUEST)
                         {
-                            System.Console.WriteLine("Error! BADREQUEST (Acknowlegdement), the server will be stopped.");
+                            System.Console.WriteLine("Error! BADREQUEST (Acknowlegdement), the server is retrying.");
                             noDatalost = false;
                         }
                         System.Console.WriteLine("Ack Sequence "+ counter_Sequence);
@@ -237,13 +236,14 @@ namespace UDP_FTP.File_Handler
             // Get close connection confirmation
             // Receive the message and verify if there are no errors
 
-            //The server waits for the client to acknowledge the closing of the scoket.
+            //The server waits for the client to confirm the closing of the socket.
             receive_from_client = socket.ReceiveFrom(buffer, ref remoteEP);
-            CloseMSG ReceiveClose = JsonSerializer.Deserialize<CloseMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_client));
-            ReceiveClose.From = sever_Consettings.From;
-            ReceiveClose.To = sever_Consettings.To;
+            CloseMSG receive_close_confirm = JsonSerializer.Deserialize<CloseMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_client));
+            receive_close_confirm.From = sever_Consettings.From;
+            receive_close_confirm.To = sever_Consettings.To;
+            
 
-            if (ErrorHandler.VerifyClose(ReceiveClose, sever_Consettings) == ErrorType.BADREQUEST){
+            if (ErrorHandler.VerifyClose(receive_close_confirm, sever_Consettings) == ErrorType.BADREQUEST){
                     Console.WriteLine("Error! BADREQUEST (Closing), the server will be stopped.");
                     return ErrorType.BADREQUEST;
             }

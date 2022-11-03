@@ -23,6 +23,7 @@ namespace Client
 
             string Server = "MyServer";
             string Client = "MyClient";
+            string Filname_on_server = "test.txt";
 
                 ConSettings client_consettings = new ConSettings()
                 {
@@ -37,19 +38,6 @@ namespace Client
             // TODO: Initialise the socket/s as needed from the description of the assignment
             Socket sock = null;
 
-            DataMSG D = new DataMSG()
-            {
-                Type = Messages.DATA
-            };
-            AckMSG ack = new AckMSG()
-            {
-                Type = Messages.ACK
-            };
-            CloseMSG cls = new CloseMSG()
-            {
-                Type = Messages.CLOSE_CONFIRM
-            };
-
             IPAddress clientIP = IPAddress.Parse("127.0.0.1");
             IPEndPoint ServerEndpoint = new IPEndPoint(clientIP, 5004);
             IPEndPoint client = new IPEndPoint(clientIP, 5010);
@@ -59,7 +47,6 @@ namespace Client
             {
                 // TODO: Instantiate and initialize your socket
                 sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-                // sock.ReceiveTimeout = 5000;
                 // TODO: Send hello mesg
                 HelloMSG hello_msg = new HelloMSG(){Type = Messages.HELLO, From = client_consettings.From, To = client_consettings.To};
                 var HelloMSGPackets = JsonSerializer.Serialize(hello_msg); 
@@ -75,128 +62,90 @@ namespace Client
                 // ConnectionID is now set
                 client_consettings.ConID = hello_reply.ConID;
 
-                string tmp;
-                // var tmp = hello_reply.To;
-                // hello_reply.To = hello_reply.From;
-                // hello_reply.From = tmp;
                 hello_reply.To = hello_msg.To;
                 hello_reply.From = hello_msg.From;
 
                 
-                var verify_message = ErrorHandler.VerifyGreeting(hello_reply, client_consettings);
-                if (verify_message == ErrorType.BADREQUEST){
+                var message_status = ErrorHandler.VerifyGreeting(hello_reply, client_consettings);
+                if (message_status == ErrorType.BADREQUEST){
                     Console.WriteLine("Error! BADREQUEST (Greeting). The client will be stopped.");
                     return;
                 }
-                RequestMSG r = new RequestMSG(){ Type = Messages.REQUEST, FileName = "test.txt", Status = ErrorType.NOERROR};
-                //zet From, To, ConID op elk object
+                RequestMSG request_msg = new RequestMSG(){From=client_consettings.From, To=client_consettings.To, Type = Messages.REQUEST, FileName = Filname_on_server, Status = ErrorType.NOERROR, ConID=client_consettings.ConID};
 
-                // SetConnection(hello_msg, r, D, ack, cls);
-                
-                // Console.WriteLine(h.To + r.To + D.To + ack.To + cls.To); // delete
 
                 // TODO: Send the RequestMSG message requesting to download a file name
-                //Stuur request
-                var RequestMSGPackets = JsonSerializer.Serialize(r);
-                message = Encoding.ASCII.GetBytes(RequestMSGPackets);
+                var serialized_request_msg = JsonSerializer.Serialize(request_msg);
+                message = Encoding.ASCII.GetBytes(serialized_request_msg);
                 sock.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
-                // Console.WriteLine("Send Request"); // delete
+        
 
                 // TODO: Receive a RequestMSG from remoteEndpoint
                 // receive the message and verify if there are no errors
                 receive_from_server = sock.ReceiveFrom(buffer, ref clientEP);
-                RequestMSG requestdata = JsonSerializer.Deserialize<RequestMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
-                // Console.WriteLine("Received Request"); // delete
-                // buffer = new byte[1000];    reset or nah?
-                // msg = new byte[100];
-                // Console.WriteLine($"{requestdata.From} {requestdata.To} {requestdata.ConID} {requestdata.Status}"); // delete
-                // Console.WriteLine($"{connectionsettings.From} {connectionsettings.To} {connectionsettings.ConID}"); // delete
-                // Console.WriteLine(requestdata.Type != Messages.REPLY); // delete
+                RequestMSG server_accept = JsonSerializer.Deserialize<RequestMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
                 
-                RequestMSG verifyreply = new RequestMSG(){
-                    Type = requestdata.Type,
-                    From = requestdata.To,
-                    To = requestdata.From,
-                    FileName = requestdata.FileName,
-                    ConID = requestdata.ConID,
-                    Status = requestdata.Status
-                };
+                server_accept.From = client_consettings.From;
+                server_accept.To = client_consettings.To;
 
-                verify_message = ErrorHandler.VerifyRequest(verifyreply, client_consettings);
-                // Console.WriteLine("Checking request"); // delete
-                // Console.WriteLine($"{verify} {r.Status}"); // delete
-                if (verify_message != r.Status && verifyreply.FileName == r.FileName){
-                    Console.WriteLine("Request Error, stopping client");
+                message_status = ErrorHandler.VerifyRequest(server_accept, client_consettings);
+                if (message_status != request_msg.Status && server_accept.FileName == request_msg.FileName){
+                    Console.WriteLine("Error! Request failed. The client will be stopped.");
                     return;
                 }
 
                 // TODO: Check if there are more DataMSG messages to be received 
                 // receive the message and verify if there are no errors
-                //rndlist -delete-
-                // var mylist = new List<int>(){
-                //     0, 0, 0, 1, 0, 1, 0, 0
-                // };
-                int ackcounter = 0;
-                string textTest = "";
-                bool addtext = true;
+                int ack_sequence = 0;
+                string download_file = "";
+                bool sequence_received = true;
+                AckMSG acck_message = new AckMSG(){From = client_consettings.From, Type = Messages.ACK, To = client_consettings.To, ConID = client_consettings.ConID};
                 while (true){
-                    //rndizer -delete-
-                    // Random rng = new Random();
-                    // var rnglist = mylist.OrderBy(item => rng.Next());
 
                     receive_from_server = sock.ReceiveFrom(buffer, ref clientEP);
-                    DataMSG data = JsonSerializer.Deserialize<DataMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
-                    // Console.WriteLine($"conid:{data.ConID} size:{data.Size} more:{data.More} seq:{data.Sequence}");
-                    // foreach(var item in data.Data){
-                    // Console.WriteLine(item);
-                    // Console.WriteLine(Encoding.ASCII.GetString(data.Data));
-                    // }
-                    ack.Sequence = data.Sequence;
-                    // Console.WriteLine(data.Sequence); // see which seq het is -delete-
-                    // Console.WriteLine(verify); // bekijk of error is  -delete-
+                    DataMSG server_data_msg = JsonSerializer.Deserialize<DataMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
+                    acck_message.Sequence = server_data_msg.Sequence;
 
                 // TODO: Send back AckMSG for each received DataMSG 
-                    if (ackcounter == data.Sequence){
-                        addtext = true;
+                    if (ack_sequence == server_data_msg.Sequence){
+                        sequence_received = true;
                     }
-                    //(rnglist.ElementAt(1) == 0 && verify == ErrorType.NOERROR){
-                    if (verify_message == ErrorType.NOERROR){
-                        // ack.Sequence = data.Sequence+10;
-                        var AckMSGPackets = JsonSerializer.Serialize(ack);
-                        message = Encoding.ASCII.GetBytes(AckMSGPackets);
+                    if (message_status == ErrorType.NOERROR){
+                        var serialized_ack_msg = JsonSerializer.Serialize(acck_message);
+                        message = Encoding.ASCII.GetBytes(serialized_ack_msg);
                         sock.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
                     }
                     else {
-                        addtext = false;
+                        sequence_received = false;
                     } 
-                    if (addtext){
-                        textTest += Encoding.ASCII.GetString(data.Data);
-                        // Console.WriteLine(textTest); // delete
+                    if (sequence_received){
+                        download_file += Encoding.ASCII.GetString(server_data_msg.Data);
                         client_consettings.Sequence++;
-                        ackcounter++;
+                        ack_sequence++;
                     }
-                    if (data.More == false && verify_message == ErrorType.NOERROR && addtext){
+                    if (server_data_msg.More == false && message_status == ErrorType.NOERROR && sequence_received){
                         break;
                     } 
                 }
-                Console.WriteLine(textTest);
+                Console.WriteLine(download_file);
 
                 // TODO: Receive close message
                 // receive the message and verify if there are no errors
                 receive_from_server = sock.ReceiveFrom(buffer, ref clientEP);
-                CloseMSG closedata = JsonSerializer.Deserialize<CloseMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
-                tmp = closedata.To;
-                closedata.To = closedata.From;
-                closedata.From = tmp;
-                verify_message = ErrorHandler.VerifyClose(closedata, client_consettings);
-                if (verify_message == ErrorType.BADREQUEST){
+                CloseMSG close_msg = JsonSerializer.Deserialize<CloseMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
+                close_msg.From = client_consettings.From;
+                close_msg.To = client_consettings.To;
+                
+                message_status = ErrorHandler.VerifyClose(close_msg, client_consettings);
+                if (message_status == ErrorType.BADREQUEST){
                     Console.WriteLine("Closing Error, stopping client");
                     return;
                 }
 
                 // TODO: confirm close message
-                var CloseMSGPackets = JsonSerializer.Serialize(cls);
-                message = Encoding.ASCII.GetBytes(CloseMSGPackets);
+                close_msg.Type = Messages.CLOSE_CONFIRM;
+                var close_confirm = JsonSerializer.Serialize(close_msg);
+                message = Encoding.ASCII.GetBytes(close_confirm);
                 sock.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
 
                 Console.WriteLine("Download Complete!");
@@ -210,23 +159,20 @@ namespace Client
 
            
         }
-        public static void SetConnection(HelloMSG hello, RequestMSG request, DataMSG data, AckMSG ack, CloseMSG close){
+        //, RequestMSG request, 
+        public static void SetConnection(HelloMSG hello, CloseMSG close){
             // request setup
-            request.From = hello.From;
-            request.To = hello.To;
-            request.ConID = hello.ConID;
+            // request.From = hello.From;
+            // request.To = hello.To;
+            // request.ConID = hello.ConID;
             // data setup
-            data.From = hello.From;
-            data.To = hello.To;
-            data.ConID = hello.ConID;
+            // data.From = hello.From;
+            // data.To = hello.To;
+            // data.ConID = hello.ConID;
             // ack setup
-            ack.From = hello.From;
-            ack.To = hello.To;
-            ack.ConID = hello.ConID;
+            
             // close setup
-            close.From = hello.From;
-            close.To = hello.To;
-            close.ConID = hello.ConID;
+            
 
         }
     }
