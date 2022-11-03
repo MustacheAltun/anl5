@@ -138,7 +138,7 @@ namespace Client
                 
                 message_status = ErrorHandler.VerifyClose(close_msg, client_consettings);
                 if (message_status == ErrorType.BADREQUEST){
-                    Console.WriteLine("Closing Error, stopping client");
+                    Console.WriteLine("Error! Closing (client), client will be stopped.");
                     return;
                 }
 
@@ -154,26 +154,8 @@ namespace Client
             }
             catch
             {
-                Console.WriteLine("\n Socket Error. Terminating");
-            }
-
-           
-        }
-        //, RequestMSG request, 
-        public static void SetConnection(HelloMSG hello, CloseMSG close){
-            // request setup
-            // request.From = hello.From;
-            // request.To = hello.To;
-            // request.ConID = hello.ConID;
-            // data setup
-            // data.From = hello.From;
-            // data.To = hello.To;
-            // data.ConID = hello.ConID;
-            // ack setup
-            
-            // close setup
-            
-
+                Console.WriteLine("\n Socket Error (Client). Terminating");
+            }  
         }
     }
 }

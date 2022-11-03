@@ -88,7 +88,7 @@ namespace UDP_FTP.File_Handler
 
             if (ErrorHandler.VerifyRequest(client_download_request, sever_Consettings) == ErrorType.BADREQUEST)
             {
-                Console.WriteLine("Error! Download request error (client side). The server will be stopped.");
+                Console.WriteLine("Error! Download request error. The server will be stopped.");
                 return ErrorType.BADREQUEST;
             }
 
