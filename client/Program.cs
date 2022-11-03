@@ -21,24 +21,22 @@ namespace Client
             string student_1 = "Mustafa Altun 1034323";
             string student_2 = "Marc-Shaquille Martina 1001658";
 
+            string Server = "MyServer";
+            string Client = "MyClient";
+
+                ConSettings client_consettings = new ConSettings()
+                {
+                    From = Client,
+                    To = Server,
+                    Sequence = 0
+                    //Missing SessionID, but this will be determined once a reply is received from the server.
+                };
 
             byte[] buffer = new byte[1000];
-            byte[] msg = new byte[100];
+            byte[] message = new byte[100];
             // TODO: Initialise the socket/s as needed from the description of the assignment
             Socket sock = null;
 
-            HelloMSG h = new HelloMSG()
-            {
-                Type = Messages.HELLO,
-                From = "MyClient",//Dns.GetHostName(),
-                To = "MyServer"
-            };
-            RequestMSG r = new RequestMSG()
-            {
-                Type = Messages.REQUEST,
-                FileName = "test.txt",
-                Status = ErrorType.NOERROR
-            };
             DataMSG D = new DataMSG()
             {
                 Type = Messages.DATA
@@ -63,51 +61,51 @@ namespace Client
                 sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                 // sock.ReceiveTimeout = 5000;
                 // TODO: Send hello mesg
-                var HelloMSGPackets = JsonSerializer.Serialize(h); 
-                msg = Encoding.ASCII.GetBytes(HelloMSGPackets);
-                sock.SendTo(msg, msg.Length, SocketFlags.None, ServerEndpoint);
-                // Console.WriteLine("Send Hello"); // delete
+                HelloMSG hello_msg = new HelloMSG(){Type = Messages.HELLO, From = client_consettings.From, To = client_consettings.To};
+                var HelloMSGPackets = JsonSerializer.Serialize(hello_msg); 
+                message = Encoding.ASCII.GetBytes(HelloMSGPackets);
+                sock.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
+        
 
                 // TODO: Receive and verify a HelloMSG 
-                int recv = sock.ReceiveFrom(buffer, ref clientEP);
-                HelloMSG hellodata = JsonSerializer.Deserialize<HelloMSG>(Encoding.ASCII.GetString(buffer, 0, recv));
+                int receive_from_server = sock.ReceiveFrom(buffer, ref clientEP);
+                HelloMSG hello_reply = JsonSerializer.Deserialize<HelloMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
                 
+                hello_msg.ConID = hello_reply.ConID;
+                // ConnectionID is now set
+                client_consettings.ConID = hello_reply.ConID;
 
-                // Console.WriteLine("Received Hello"); // delete
-                h.ConID = hellodata.ConID;
+                string tmp;
+                // var tmp = hello_reply.To;
+                // hello_reply.To = hello_reply.From;
+                // hello_reply.From = tmp;
+                hello_reply.To = hello_msg.To;
+                hello_reply.From = hello_msg.From;
 
-                // ConIds setups
-                ConSettings connectionsettings = new ConSettings()
-                {
-                    From = h.From,
-                    To = h.To,
-                    ConID = h.ConID,
-                    Sequence = 0
-
-                };
-                var tmp = hellodata.To;
-                hellodata.To = hellodata.From;
-                hellodata.From = tmp;
-                var verify = ErrorHandler.VerifyGreeting(hellodata, connectionsettings);
-                if (verify == ErrorType.BADREQUEST){
-                    Console.WriteLine("Greeting Error, stopping client");
+                
+                var verify_message = ErrorHandler.VerifyGreeting(hello_reply, client_consettings);
+                if (verify_message == ErrorType.BADREQUEST){
+                    Console.WriteLine("Error! BADREQUEST (Greeting). The client will be stopped.");
                     return;
                 }
+                RequestMSG r = new RequestMSG(){ Type = Messages.REQUEST, FileName = "test.txt", Status = ErrorType.NOERROR};
                 //zet From, To, ConID op elk object
-                SetConnection(h, r, D, ack, cls);
+
+                // SetConnection(hello_msg, r, D, ack, cls);
+                
                 // Console.WriteLine(h.To + r.To + D.To + ack.To + cls.To); // delete
 
                 // TODO: Send the RequestMSG message requesting to download a file name
                 //Stuur request
                 var RequestMSGPackets = JsonSerializer.Serialize(r);
-                msg = Encoding.ASCII.GetBytes(RequestMSGPackets);
-                sock.SendTo(msg, msg.Length, SocketFlags.None, ServerEndpoint);
+                message = Encoding.ASCII.GetBytes(RequestMSGPackets);
+                sock.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
                 // Console.WriteLine("Send Request"); // delete
 
                 // TODO: Receive a RequestMSG from remoteEndpoint
                 // receive the message and verify if there are no errors
-                recv = sock.ReceiveFrom(buffer, ref clientEP);
-                RequestMSG requestdata = JsonSerializer.Deserialize<RequestMSG>(Encoding.ASCII.GetString(buffer, 0, recv));
+                receive_from_server = sock.ReceiveFrom(buffer, ref clientEP);
+                RequestMSG requestdata = JsonSerializer.Deserialize<RequestMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
                 // Console.WriteLine("Received Request"); // delete
                 // buffer = new byte[1000];    reset or nah?
                 // msg = new byte[100];
@@ -124,10 +122,10 @@ namespace Client
                     Status = requestdata.Status
                 };
 
-                verify = ErrorHandler.VerifyRequest(verifyreply, connectionsettings);
+                verify_message = ErrorHandler.VerifyRequest(verifyreply, client_consettings);
                 // Console.WriteLine("Checking request"); // delete
                 // Console.WriteLine($"{verify} {r.Status}"); // delete
-                if (verify != r.Status && verifyreply.FileName == r.FileName){
+                if (verify_message != r.Status && verifyreply.FileName == r.FileName){
                     Console.WriteLine("Request Error, stopping client");
                     return;
                 }
@@ -146,8 +144,8 @@ namespace Client
                     // Random rng = new Random();
                     // var rnglist = mylist.OrderBy(item => rng.Next());
 
-                    recv = sock.ReceiveFrom(buffer, ref clientEP);
-                    DataMSG data = JsonSerializer.Deserialize<DataMSG>(Encoding.ASCII.GetString(buffer, 0, recv));
+                    receive_from_server = sock.ReceiveFrom(buffer, ref clientEP);
+                    DataMSG data = JsonSerializer.Deserialize<DataMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
                     // Console.WriteLine($"conid:{data.ConID} size:{data.Size} more:{data.More} seq:{data.Sequence}");
                     // foreach(var item in data.Data){
                     // Console.WriteLine(item);
@@ -162,11 +160,11 @@ namespace Client
                         addtext = true;
                     }
                     //(rnglist.ElementAt(1) == 0 && verify == ErrorType.NOERROR){
-                    if (verify == ErrorType.NOERROR){
+                    if (verify_message == ErrorType.NOERROR){
                         // ack.Sequence = data.Sequence+10;
                         var AckMSGPackets = JsonSerializer.Serialize(ack);
-                        msg = Encoding.ASCII.GetBytes(AckMSGPackets);
-                        sock.SendTo(msg, msg.Length, SocketFlags.None, ServerEndpoint);
+                        message = Encoding.ASCII.GetBytes(AckMSGPackets);
+                        sock.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
                     }
                     else {
                         addtext = false;
@@ -174,10 +172,10 @@ namespace Client
                     if (addtext){
                         textTest += Encoding.ASCII.GetString(data.Data);
                         // Console.WriteLine(textTest); // delete
-                        connectionsettings.Sequence++;
+                        client_consettings.Sequence++;
                         ackcounter++;
                     }
-                    if (data.More == false && verify == ErrorType.NOERROR && addtext){
+                    if (data.More == false && verify_message == ErrorType.NOERROR && addtext){
                         break;
                     } 
                 }
@@ -185,21 +183,21 @@ namespace Client
 
                 // TODO: Receive close message
                 // receive the message and verify if there are no errors
-                recv = sock.ReceiveFrom(buffer, ref clientEP);
-                CloseMSG closedata = JsonSerializer.Deserialize<CloseMSG>(Encoding.ASCII.GetString(buffer, 0, recv));
+                receive_from_server = sock.ReceiveFrom(buffer, ref clientEP);
+                CloseMSG closedata = JsonSerializer.Deserialize<CloseMSG>(Encoding.ASCII.GetString(buffer, 0, receive_from_server));
                 tmp = closedata.To;
                 closedata.To = closedata.From;
                 closedata.From = tmp;
-                verify = ErrorHandler.VerifyClose(closedata, connectionsettings);
-                if (verify == ErrorType.BADREQUEST){
+                verify_message = ErrorHandler.VerifyClose(closedata, client_consettings);
+                if (verify_message == ErrorType.BADREQUEST){
                     Console.WriteLine("Closing Error, stopping client");
                     return;
                 }
 
                 // TODO: confirm close message
                 var CloseMSGPackets = JsonSerializer.Serialize(cls);
-                msg = Encoding.ASCII.GetBytes(CloseMSGPackets);
-                sock.SendTo(msg, msg.Length, SocketFlags.None, ServerEndpoint);
+                message = Encoding.ASCII.GetBytes(CloseMSGPackets);
+                sock.SendTo(message, message.Length, SocketFlags.None, ServerEndpoint);
 
                 Console.WriteLine("Download Complete!");
                 Console.WriteLine("Stopping Client.");
