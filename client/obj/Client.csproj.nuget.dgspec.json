@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Min En\\Desktop\\new\\assignment22_23_student_template\\client\\Client.csproj": {}
+    "D:\\hbo\\anl5\\anl5\\client\\Client.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Min En\\Desktop\\new\\assignment22_23_student_template\\client\\Client.csproj": {
+    "D:\\hbo\\anl5\\anl5\\client\\Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Min En\\Desktop\\new\\assignment22_23_student_template\\client\\Client.csproj",
+        "projectUniqueName": "D:\\hbo\\anl5\\anl5\\client\\Client.csproj",
         "projectName": "Client",
-        "projectPath": "C:\\Users\\Min En\\Desktop\\new\\assignment22_23_student_template\\client\\Client.csproj",
-        "packagesPath": "C:\\Users\\Min En\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Min En\\Desktop\\new\\assignment22_23_student_template\\client\\obj\\",
+        "projectPath": "D:\\hbo\\anl5\\anl5\\client\\Client.csproj",
+        "packagesPath": "C:\\Users\\Mustafa\\.nuget\\packages\\",
+        "outputPath": "D:\\hbo\\anl5\\anl5\\client\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Min En\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Mustafa\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

@@ -12,7 +12,7 @@ namespace UDP_FTP.Error_Handling
     {
         public static ErrorType VerifyGreeting( HelloMSG hello, ConSettings C)
         {
-            if ( hello.To != C.To || hello.Type != Messages.HELLO)
+            if ( hello.To != C.To || hello.Type != Messages.HELLO_REPLY)
                 return ErrorType.BADREQUEST;
             return ErrorType.NOERROR;
         }
@@ -30,7 +30,7 @@ namespace UDP_FTP.Error_Handling
         }
         public static ErrorType VerifyClose( CloseMSG cls, ConSettings C)
         {
-            if (cls.ConID != C.ConID || cls.From != C.From || cls.To != C.To || cls.Type != Messages.CLOSE_CONFIRM)
+            if (cls.ConID != C.ConID || cls.From != C.From || cls.To != C.To || cls.Type != Messages.CLOSE_REQUEST)
                 return ErrorType.BADREQUEST;
             return ErrorType.NOERROR;
         }

@@ -13,3 +13,18 @@ C:\Users\Min En\Desktop\new\assignment22_23_student_template\file_download_serve
 C:\Users\Min En\Desktop\new\assignment22_23_student_template\file_download_server\obj\Debug\net6.0\UDP_FTP.pdb
 C:\Users\Min En\Desktop\new\assignment22_23_student_template\file_download_server\obj\Debug\net6.0\UDP_FTP.genruntimeconfig.cache
 C:\Users\Min En\Desktop\new\assignment22_23_student_template\file_download_server\obj\Debug\net6.0\ref\UDP_FTP.dll
+D:\hbo\anl5\anl5\file_download_server\bin\Debug\net6.0\UDP_FTP.exe
+D:\hbo\anl5\anl5\file_download_server\bin\Debug\net6.0\UDP_FTP.deps.json
+D:\hbo\anl5\anl5\file_download_server\bin\Debug\net6.0\UDP_FTP.runtimeconfig.json
+D:\hbo\anl5\anl5\file_download_server\bin\Debug\net6.0\UDP_FTP.dll
+D:\hbo\anl5\anl5\file_download_server\bin\Debug\net6.0\UDP_FTP.pdb
+D:\hbo\anl5\anl5\file_download_server\obj\Debug\net6.0\UDP_FTP.csproj.AssemblyReference.cache
+D:\hbo\anl5\anl5\file_download_server\obj\Debug\net6.0\UDP_FTP.GeneratedMSBuildEditorConfig.editorconfig
+D:\hbo\anl5\anl5\file_download_server\obj\Debug\net6.0\UDP_FTP.AssemblyInfoInputs.cache
+D:\hbo\anl5\anl5\file_download_server\obj\Debug\net6.0\UDP_FTP.AssemblyInfo.cs
+D:\hbo\anl5\anl5\file_download_server\obj\Debug\net6.0\UDP_FTP.csproj.CoreCompileInputs.cache
+D:\hbo\anl5\anl5\file_download_server\obj\Debug\net6.0\UDP_FTP.dll
+D:\hbo\anl5\anl5\file_download_server\obj\Debug\net6.0\refint\UDP_FTP.dll
+D:\hbo\anl5\anl5\file_download_server\obj\Debug\net6.0\UDP_FTP.pdb
+D:\hbo\anl5\anl5\file_download_server\obj\Debug\net6.0\UDP_FTP.genruntimeconfig.cache
+D:\hbo\anl5\anl5\file_download_server\obj\Debug\net6.0\ref\UDP_FTP.dll

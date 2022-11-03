@@ -14,8 +14,8 @@ namespace UDP_FTP
             // TODO: add the student number of your group members as a string value. 
             // string format example: "Jan Jansen 09123456" 
             // If a group has only one member fill in an empty string for the second student
-            string student_1 = "Min En Cheng 1037939";
-            string student_2 = "Reajel Cicilia 1018371";
+            string student_1 = "Mustafa Altun 1034323";
+            string student_2 = "Marc-Shaquille Martina 1001658";
 
             
 
